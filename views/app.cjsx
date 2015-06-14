@@ -31,6 +31,7 @@ plugins = plugins.map (filePath) ->
   plugin.priority = 10000 unless plugin.priority?
   plugin
 plugins = plugins.filter (plugin) ->
+  plugin.func() if plugin.trigger
   plugin.show isnt false
 plugins = _.sortBy(plugins, 'priority')
 
@@ -103,6 +104,10 @@ ModalTrigger = React.createClass
     @setState
       isModalOpen: false
     window.showModal()
+  handleClose: ->
+    window.modalLocked = false
+    @setState
+      isModalOpen: false
   handleModal: (e) ->
     window.modalLocked = true
     @setState
@@ -112,8 +117,10 @@ ModalTrigger = React.createClass
       footer: e.detail.footer
   componentDidMount: ->
     window.addEventListener 'poi.modal', @handleModal
+    window.addEventListener 'poi.modal.close', @handleClose
   componentWillUnmount: ->
     window.removeEventListener 'poi.modal', @handleModal
+    window.removeEventListener 'poi.modal.close', @handleClose
   renderFooter: (footer) ->
     return unless footer? and footer.length? and footer.length > 0
     self = @
@@ -133,10 +140,13 @@ ModalTrigger = React.createClass
         <div className='modal-body'>
           {@state.content}
         </div>
-        <div className='modal-footer'>
-          <Button onClick={@handleToggle}>关闭</Button>
-          {@renderFooter @state.footer}
-        </div>
+        {
+          if @state.title
+            <div className='modal-footer'>
+              <Button onClick={@handleToggle}>关闭</Button>
+              {@renderFooter @state.footer}
+            </div>
+        }
       </Modal>
 
 React.render <PoiAlert />, $('poi-alert')

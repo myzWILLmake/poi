@@ -19,3 +19,6 @@
 [submodule "plugins/ship-info"]
 	path = plugins/ship-info
 	url = https://github.com/yudachi/plugin-ship-info
+[submodule "plugins/utils"]
+	path = plugins/utils
+	url = git@github.com:yudachi/plugin-utils.git

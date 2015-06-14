@@ -93,6 +93,11 @@ window.showModal = ->
       content: content
       footer: footer
   window.dispatchEvent event
+window.closeModal = ->
+  event = new Event 'poi.modal.close',
+    bubbles: true
+    cancelable: true
+  window.dispatchEvent event
 # Node modules
 window.config = remote.require './lib/config'
 window.proxy = remote.require './lib/proxy'
